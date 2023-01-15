@@ -39,3 +39,8 @@ octave-workspace
 
 #mat files
 *.mat
+
+#images/media
+*.jpg
+*.png
+*.mp4
