@@ -44,3 +44,13 @@ octave-workspace
 *.jpg
 *.png
 *.mp4
+
+#compressed
+*.zip
+*.gz
+
+#Specific files
+/Applications/MNIST/Step01_ObtainDataset/t10k-images-idx3-ubyte/t10k-images-idx3-ubyte
+/Applications/MNIST/Step01_ObtainDataset/t10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte
+/Applications/MNIST/Step01_ObtainDataset/train-images-idx3-ubyte/train-images-idx3-ubyte
+/Applications/MNIST/Step01_ObtainDataset/train-labels-idx1-ubyte/train-labels-idx1-ubyte
