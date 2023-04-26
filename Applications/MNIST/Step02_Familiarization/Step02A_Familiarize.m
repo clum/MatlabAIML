@@ -35,7 +35,7 @@ TestSetLabels       = temp2.TestSetLabels;
 cd(cwd);
 
 %View image and label
-figure
+figure('Name',['set = ',set])
 k = 1;
 for m=1:M
     for n=1:N
