@@ -6,6 +6,7 @@
 %Version History
 %04/22/23: Created
 %04/23/23: Continued working
+%05/06/23: Changed to use NeuralNetwork.TrainNeuralNetwork method
 
 clear
 clc
@@ -14,7 +15,9 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 103;
+% scenarioSelection = 1;
+% scenarioSelection = 103;
+scenarioSelection = 201;
 
 switch scenarioSelection
     case 1
@@ -39,16 +42,59 @@ switch scenarioSelection
         trainingDataFile = 'TrainingAndTestDataScenario1.mat';
         nodesPerLayer = [28*28 50 10];
         errorFunctionID = ErrorFunctionID.SquaredError;
-        
-        numSteps    = 50000; %num steps of SGD
-        
+               
         numSubSteps = 1;  %num steps to take at a given example
         eta         = 0.012;   %step size (AKA learning rate)
+        miniBatchSize = 1;
+        displayProgress = true;
         
         plotSubstepProgress = false;
-        
+                
         nn = NeuralNetwork(nodesPerLayer);
         nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
+        
+        %Format as options
+        options.errorFunctionID = errorFunctionID;
+        options.numSubSteps     = numSubSteps;
+        options.eta             = eta;
+        options.miniBatchSize   = miniBatchSize;
+        options.displayProgress = displayProgress;
+        
+    case 201
+        %Accuracy: 21.30%, 21.08% (eta = 0.012, miniBatch = 30)
+        %Accuracy: 51.69%, 52.39% (eta = 0.1, miniBatch = 30)
+        %Accuracy: 57.07%, 58.83% (eta = 0.9, miniBatch = 30)
+        %Accuracy: 58.86%, 61.76% (eta = 0.95, miniBatch = 30)
+        %Accuracy: 61.62%, 64.85% (eta = 1.0, miniBatch = 30)
+        %Accuracy: 57.62%, 58.94% (eta = 1.0, miniBatch = 30, numSubSteps = 2)
+        %Accuracy: 60.49%, 62.92% (eta = 1.05, miniBatch = 30)        
+        %Accuracy: 55.08%, 57.53% (eta = 1.1, miniBatch = 30)
+        %Accuracy: 55.37%, 57.28% (eta = 1.2, miniBatch = 30)
+        %Accuracy: 46.37%, 46.67% (eta = 1.5, miniBatch = 30)
+        %Accuracy: 49.79%, 50.72% (eta = 2.0, miniBatch = 30)
+        %Accuracy: 11.51%, 11.68% (eta = 5.0, miniBatch = 30)
+        
+%         trainingDataFile = 'TrainingAndTestDataScenario11.mat';
+        trainingDataFile = 'TrainingAndTestDataScenario1.mat';        
+        nodesPerLayer = [28*28 50 10];
+        errorFunctionID = ErrorFunctionID.SquaredError;
+                
+        numSubSteps = 1;  %num steps to take at a given example
+        eta         = 1;   %step size (AKA learning rate)
+        miniBatchSize = 30;
+        displayProgress = true;
+        
+        plotSubstepProgress = false;
+                
+        nn = NeuralNetwork(nodesPerLayer);
+        nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
+        
+        %Format as options
+        options.errorFunctionID = errorFunctionID;
+        options.numSubSteps     = numSubSteps;
+        options.eta             = eta;
+        options.miniBatchSize   = miniBatchSize;
+        options.displayProgress = displayProgress;
         
     case 2
         %Accuracy: 09.90%, 10.40% (numSubSteps = 3)
@@ -279,17 +325,20 @@ for k=1:9
     title(['idx ',num2str(k),',  Label ' ,num2str(label)])
 end
 
-%% Train network
-E_data              = [];
-U_data              = [];
-D_data              = [];
-Y_data              = [];
-norm_gradient_data  = [];
+%Reformat data
+disp('Formatting training data')
 
+%Create U_data and D_data matrices
+nu = nn.NumInputs;
+no = nn.NumOutputs;
+ns = length(TrainingSetLabels);
+
+U_data = zeros(ns,nu);
+D_data = zeros(ns,no);
 
 deltaFraction = 0.1;        %gradularity in displaying progress
 currentFractionThreshold = 1*deltaFraction;
-for k=1:numSteps
+for k=1:ns
     A       = TrainingSetImages(:,:,k);
     label   = TrainingSetLabels(k);
     
@@ -301,69 +350,27 @@ for k=1:numSteps
     %Convert the label to a vector d
     D = LabelToVector(label);
     
-    Esub_data = [];
-    for m=1:numSubSteps
-        %Compute gradient
-        [dEc_dW,dEc_db] = nn.BackPropagate(U,D,errorFunctionID);
-        
-        %Take optimization gradient descent step (AKA update weights and biases)
-        for n=1:nn.NumLayers-1
-            L = n+1;
-            
-            W_L = nn.GetWeightsIncomingToLayer(L);
-            b_L = nn.GetBiasesAtLayer(L);
-            
-            dEc_dW_L = dEc_dW{n};   %output from BackPropagate is off by 1
-            dEc_db_L = dEc_db{n};   %output from BackPropagate is off by 1
-            
-            W_L_prime = W_L - eta*dEc_dW_L;
-            b_L_prime = b_L - eta*dEc_db_L;
-            
-            nn.SetWeightsIncomingToLayer(L,W_L_prime);
-            nn.SetBiasesAtLayer(L,b_L_prime);
-        end
-        
-        %Optional: Check if the norm of the gradient is below a threshold
-        %and terminate if appropriate
-        if(plotSubstepProgress)
-            [norm_dEc_dW,norm_dEc_db] = NeuralNetwork.GradientNorm(dEc_dW,dEc_db);
-            
-            Y = nn.ForwardPropagate(U);
-            E = NeuralNetwork.Error(Y,D,errorFunctionID);
-            Esub_data(:,end+1) = E;
-        end
-    end
-    
-    if(plotSubstepProgress)
-        figh_Esubstep = figure;
-        plot(Esub_data);
-        plotSubstepProgress = false;
-    end
-    
-    %Compute various performance metrics at the end of the substeps
-    [norm_dEc_dW,norm_dEc_db] = NeuralNetwork.GradientNorm(dEc_dW,dEc_db);
-    
-    Y = nn.ForwardPropagate(U);
-    E = NeuralNetwork.Error(Y,D,errorFunctionID);
-    
-    E_data(:,end+1)             = E;
-    U_data(:,end+1)             = U;
-    D_data(:,end+1)             = D;
-    Y_data(:,end+1)             = Y;
-    norm_gradient_data(:,end+1) = norm_dEc_dW + norm_dEc_db;
+    U_data(k,:) = U';
+    D_data(k,:) = D';
     
     %Display progress
-    fractionComplete = k/numSteps;
+    fractionComplete = k/ns;
     
     if(fractionComplete > currentFractionThreshold)
         disp([num2str(fractionComplete*100),'% complete'])
         currentFractionThreshold = currentFractionThreshold + deltaFraction;
     end
 end
+  
+%% Train network
+disp('Training network')
+[E_data,norm_gradient_data] = nn.TrainNeuralNetwork(U_data,D_data,options);
+E_data              = E_data';
+norm_gradient_data  = norm_gradient_data';
 
 %% Visualize training results
 %Average E_data
-averageWindow = 100;
+averageWindow = 20;
 E_data_average = NaN(1,length(E_data));
 for k=averageWindow:length(E_data)
     idxStart    = k-averageWindow+1;
@@ -394,10 +401,7 @@ legend(StringWithUnderscoresForPlot('norm_gradient'))
 outputFile = ['TrainedNetwork_scenario',num2str(scenarioSelection),'.mat'];
 saveVars = {
     'nn'
-    'errorFunctionID'
-    'numSteps'
-    'numSubSteps'
-    'eta'
+    'options'
     
     'TrainingSetImages'
     'TrainingSetLabels'

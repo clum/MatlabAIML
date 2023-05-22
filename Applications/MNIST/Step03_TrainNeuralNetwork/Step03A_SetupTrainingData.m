@@ -13,7 +13,7 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 10;
+scenarioSelection = 11;
 
 %% Load data
 cwd = pwd;
@@ -187,6 +187,20 @@ switch scenarioSelection
         
         idxTestStart        = idxTrainingEnd + 1;
         idxTestEnd          = idxTestStart + numTestSamples - 1;
+        
+        idxTraining         = [idxTrainingStart:1:idxTrainingEnd];
+        idxTest             = [idxTestStart:1:idxTestEnd];
+        
+    case 11
+        %Small set for testing
+        
+        %Training samples:  00,001 - 02,000
+        %Test samples:      60,001 - 70,000
+        idxTrainingStart    = 1;
+        idxTrainingEnd      = 2000;
+        
+        idxTestStart        = 60001;
+        idxTestEnd          = 70000;
         
         idxTraining         = [idxTrainingStart:1:idxTrainingEnd];
         idxTest             = [idxTestStart:1:idxTestEnd];

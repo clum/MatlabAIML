@@ -1,12 +1,12 @@
-%Validate the trained the neural network
+%Analyze the trained the neural network
+%
+%Examine saturation at each layer
 %
 %Christopher Lum
 %lum@uw.edu
 
 %Version History
-%04/22/23: Created
-%04/23/23: Continued working
-%05/06/23: Continued working
+%05/19/23: Created
 
 clear
 clc
@@ -36,10 +36,16 @@ tic
 
 trainedNetworkFile = 'TrainedNetwork_scenario1_condition1.mat';
 
+
+
 %% Load data
 temp = load(trainedNetworkFile);
 nn                  = temp.nn;
 options             = temp.options;
+
+warning('TEMP: Refactor')
+temp2 = load('NeuralNetworkOnly_ID03.mat')
+nn = temp2.nn;
 
 TrainingSetImages   = temp.TrainingSetImages;
 TrainingSetLabels   = temp.TrainingSetLabels;
@@ -50,45 +56,16 @@ E_data              = temp.E_data;
 norm_gradient_data  = temp.norm_gradient_data;
 
 %% Assess accuracy 
-%Assess against training data
-Y_train = [];
-E_train = [];
-classifiedCorrectTrain      = 0;
-classifiedIncorrectTrain    = 0;
-for k=1:length(TrainingSetLabels)
-    A       = TrainingSetImages(:,:,k);
-    label   = TrainingSetLabels(k);
-       
-    %Reshape into an input vector U (stack each column on top of one
-    %another) and convert to double
-    [M,N] = size(A);
-    U = double(reshape(A,M*N,1));
-    
-    %Convert the label to a vector d
-    D = LabelToVector(label);
-    
-    Y = nn.ForwardPropagate(U);
-    
-    E_train(end+1) = NeuralNetwork.Error(Y,D,options.errorFunctionID);
-    Y_train(:,k) = Y;
-    
-    %How did network classify the digit
-    idx = find(Y==max(Y));
-    labelClassified = idx - 1;
-    
-    if(labelClassified==label)
-        classifiedCorrectTrain = classifiedCorrectTrain + 1;
-    else
-        classifiedIncorrectTrain = classifiedIncorrectTrain + 1;
-    end
-end
 
 %Assess against testing data
 Y_test  = [];
 E_test  = [];
 classifiedCorrectTest   = 0;
 classifiedIncorrectTest = 0;
-for k=1:length(TestSetLabels)
+y_layer_data = {};
+% for k=1:length(TestSetLabels)
+for k=1:10
+
     A       = TestSetImages(:,:,k);
     label   = TestSetLabels(k);
        
@@ -102,6 +79,17 @@ for k=1:length(TestSetLabels)
     
     Y = nn.ForwardPropagate(U);    
 
+    %What are the outputs at each layer
+    for m=1:nn.NumLayers
+        [y_m] = nn.GetOutputsAtLayer(m);
+        
+        if(k==1)
+            y_layer_data{m} = [y_m];
+        else
+            y_layer_data{m} = [y_layer_data{m};y_m];
+        end
+    end
+    
     E_test(end+1) = NeuralNetwork.Error(Y,D,options.errorFunctionID);
     Y_test(:,k)  = Y;
     
@@ -116,44 +104,15 @@ for k=1:length(TestSetLabels)
     end
 end
 
-%% Visualize training results
-disp('Accuracy on training data')
-classifiedCorrectTrain/length(TrainingSetLabels)
-
-disp('Accuracy on test data')
-classifiedCorrectTest/length(TestSetLabels)
-
-%Filter E_data to get a better idea of system converged during training
-averageWindow = 20;
-E_data_average = NaN(1,length(E_data));
-for k=averageWindow:length(E_data)
-    idxStart    = k-averageWindow+1;
-    idxEnd      = idxStart+averageWindow-1;
-    E_data_average(k) = sum(E_data(idxStart:idxEnd))/averageWindow;
-end
-
+%% Visualize results
+%Histogram of layer outputs to understand saturation
 figure
-subplot(3,1,1)
-hold on
-plot(E_data)
-plot(E_data_average)
-grid on
-legend('E (during training process)')
-
-subplot(3,1,2)
-plot(E_train)
-grid on
-legend('E (on training set)')
-
-subplot(3,1,3)
-plot(E_test)
-grid on
-legend('E (on test set)')
-
-%% Save the NeuralNetwork by itself in a file
-outputFile = 'NeuralNetworkOnly.mat';
-save(outputFile,'nn')
-disp(['Saved NeuralNetwork variable only to ',outputFile])
+numBins = 20;
+for m=1:nn.NumLayers
+    subplot(nn.NumLayers,1,m)
+    hist(y_layer_data{m},numBins)
+    ylabel(['Layer ',num2str(m)'])
+end
 
 toc
 disp('DONE!')

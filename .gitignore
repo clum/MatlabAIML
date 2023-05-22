@@ -49,6 +49,29 @@ octave-workspace
 *.zip
 *.gz
 
+#----------------------------
+#Microsoft Office
+#----------------------------
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Word Auto Backup File
+Backup of *.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+# PowerPoint temporary
+~$*.ppt*
+
+# Visio autosave temporary files
+*.~vsd*
+
 #Specific files
 /Applications/MNIST/Step01_ObtainDataset/t10k-images-idx3-ubyte/t10k-images-idx3-ubyte
 /Applications/MNIST/Step01_ObtainDataset/t10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte
