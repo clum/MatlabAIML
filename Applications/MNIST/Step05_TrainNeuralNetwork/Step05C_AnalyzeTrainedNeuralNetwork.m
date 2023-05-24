@@ -7,6 +7,7 @@
 
 %Version History
 %05/19/23: Created
+%05/24/23: Refactored workflow
 
 clear
 clc
@@ -15,29 +16,9 @@ close all
 tic
 
 %% User selections
-% trainedNetworkFile = 'TrainedNetwork_scenario1_ORIGINAL.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario1_MiniBatch1.mat'
-% trainedNetworkFile = 'TrainedNetwork_scenario1.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario2.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario3.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario4.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario5.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario6.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario1.mat';
 
-% trainedNetworkFile = 'TrainedNetwork_scenario99.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario100.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario101.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario102.mat';
-% trainedNetworkFile = 'TrainedNetwork_scenario103.mat';
-
-% trainedNetworkFile = 'TrainedNetwork_scenario201.mat';
-
-% trainedNetworkFile = 'TrainedNetwork_scenario301.mat';
-
-trainedNetworkFile = 'TrainedNetwork_scenario1_condition1.mat';
-
-
-
+error('START HERE!!!')
 %% Load data
 temp = load(trainedNetworkFile);
 nn                  = temp.nn;
