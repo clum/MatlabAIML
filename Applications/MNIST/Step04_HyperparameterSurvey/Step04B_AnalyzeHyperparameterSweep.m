@@ -1,10 +1,11 @@
-%Validate the trained the neural network
+%Analyze the hyperparameter sweep
 %
 %Christopher Lum
 %lum@uw.edu
 
 %Version History
 %05/08/23: Created based on previous version
+%05/24/23: Refactored workflow
 
 clear
 clc
@@ -15,12 +16,12 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 4;
+scenarioSelection = 2;
 
 %% Load data
 %Find all files associated with this scenarioSelection
 allFiles = dir2(pwd,'only_files');
-expressionPrefix = ['TrainedNetwork_scenario',num2str(scenarioSelection),'_condition'];
+expressionPrefix = ['HyperparameterSweepResultsScenario',num2str(scenarioSelection),'_condition'];
 expression = [expressionPrefix,'*'];
 indices = ~cellfun(@isempty,regexp(allFiles,expression));
 
@@ -52,34 +53,31 @@ for m=1:numConditions
     disp(['Loading ',trainedNetworkFile])
     
     temp = load(trainedNetworkFile);
-    nn                  = temp.nn;
-    options             = temp.options;
     
-    TrainingSetImages   = temp.TrainingSetImages;
-    TrainingSetLabels   = temp.TrainingSetLabels;
-    TestSetImages       = temp.TestSetImages;
-    TestSetLabels       = temp.TestSetLabels;
+    nn                          = temp.nn;
+    options                     = temp.options;
+    trainingDataFile            = temp.trainingDataFile;
+    initialNeuralNetworkFile    = temp.initialNeuralNetworkFile;
+    E_data                      = temp.E_data;
+    norm_gradient_data          = temp.norm_gradient_data;
     
-    E_data              = temp.E_data;
-    norm_gradient_data  = temp.norm_gradient_data;
+    temp2 = load(trainingDataFile);
+    U_train     = temp2.U_train;
+    D_train     = temp2.D_train;
+    U_test      = temp2.U_test;
+    D_test      = temp2.D_test;
     
+    [ns_train,~]    = size(U_train);
+    [ns_test,~]     = size(U_test);
     %% Assess accuracy
     %Assess against training data
     Y_train = [];
     E_train = [];
     classifiedCorrectTrain      = 0;
     classifiedIncorrectTrain    = 0;
-    for k=1:length(TrainingSetLabels)
-        A       = TrainingSetImages(:,:,k);
-        label   = TrainingSetLabels(k);
-        
-        %Reshape into an input vector U (stack each column on top of one
-        %another) and convert to double
-        [M,N] = size(A);
-        U = double(reshape(A,M*N,1));
-        
-        %Convert the label to a vector d
-        D = LabelToVector(label);
+    for k=1:ns_train
+        U = U_train(k,:)';
+        D = D_train(k,:)';
         
         Y = nn.ForwardPropagate(U);
         
@@ -87,6 +85,9 @@ for m=1:numConditions
         Y_train(:,k) = Y;
         
         %How did network classify the digit
+        idx = find(D==max(D));
+        label = idx - 1;
+        
         idx = find(Y==max(Y));
         labelClassified = idx - 1;
         
@@ -102,24 +103,19 @@ for m=1:numConditions
     E_test  = [];
     classifiedCorrectTest   = 0;
     classifiedIncorrectTest = 0;
-    for k=1:length(TestSetLabels)
-        A       = TestSetImages(:,:,k);
-        label   = TestSetLabels(k);
-        
-        %Reshape into an input vector U (stack each column on top of one
-        %another) and convert to double
-        [M,N] = size(A);
-        U = double(reshape(A,M*N,1));
-        
-        %Convert the label to a vector d
-        D = LabelToVector(label);
+    for k=1:ns_test
+        U = U_test(k,:)';
+        D = D_test(k,:)';
         
         Y = nn.ForwardPropagate(U);
         
         E_test(end+1) = NeuralNetwork.Error(Y,D,options.errorFunctionID);
-        Y_test(:,k)  = Y;
+        Y_test(:,k) = Y;
         
         %How did network classify the digit
+        idx = find(D==max(D));
+        label = idx - 1;
+        
         idx = find(Y==max(Y));
         labelClassified = idx - 1;
         
@@ -131,8 +127,8 @@ for m=1:numConditions
     end
     
     %% Visualize training results
-    accuracyTrain = classifiedCorrectTrain/length(TrainingSetLabels);
-    accuracyTest = classifiedCorrectTest/length(TestSetLabels);
+    accuracyTrain = classifiedCorrectTrain/ns_train;
+    accuracyTest = classifiedCorrectTest/ns_test;
     
     disp(['Accuracy on training data = ',num2str(accuracyTrain)])
     disp(['Accuracy on test data     = ',num2str(accuracyTest)])

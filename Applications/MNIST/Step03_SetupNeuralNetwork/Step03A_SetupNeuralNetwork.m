@@ -22,6 +22,11 @@ switch scenarioSelection
         nn = NeuralNetwork(nodesPerLayer);
         nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
         
+        %Initialize random number generator so weights and biases are
+        %deterministically set
+        seed = 1;
+        rng(seed);
+        
         %Initialize weights between random weights/biases uniformly between [-1,1]
         %Set weights (note the first element of weights is the weights
         %incoming to layer 2)
