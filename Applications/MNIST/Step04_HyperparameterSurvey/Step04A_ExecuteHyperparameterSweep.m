@@ -62,60 +62,7 @@ switch scenarioSelection
             numEpochs_cell{end+1}       = 5;
             displayProgress_cell{end+1} = true;
         end
-        
-        %     case 3
-        %         %Vary eta
-        %         trainingDataFile = 'TrainingAndTestDataScenario11.mat';
-        %         numConditions = 10;
-        %
-        %         etaVec = linspace(0.5,1.5,numConditions);
-        %         for m=1:numConditions
-        %             nodesPerLayer_cell{end+1}   = [28*28 50 10];
-        %             errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
-        %             numSubSteps_cell{end+1}     = 1;
-        %             eta_cell{end+1}             = etaVec(m);
-        %             miniBatchSize_cell{end+1}   = 32;
-        %             numEpochs_cell{end+1}       = 2;
-        %             displayProgress_cell{end+1} = true;
-        %         end
-        %
-        %     case 4
-        %         %Vary eta
-        %
-        %         trainingDataFile = 'TrainingAndTestDataScenario1.mat';
-        %         numConditions = 8;
-        %
-        %         etaVec = linspace(0.1,10,numConditions);
-        %         for m=1:numConditions
-        %             nodesPerLayer_cell{end+1}   = [28*28 50 10];
-        %             errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
-        %             numSubSteps_cell{end+1}     = 1;
-        %             eta_cell{end+1}             = etaVec(m);
-        %             miniBatchSize_cell{end+1}   = 32;
-        %             numEpochs_cell{end+1}       = 2;
-        %             displayProgress_cell{end+1} = true;
-        %         end
-        %
-        %         initialNeuralNetworkFile = 'NeuralNetwork_784_50_10_ReLU_ReLU_Sigmoid.mat';
-        %
-        %     case 101
-        %         %Small set for testing
-        %         trainingDataFile = 'TrainingAndTestDataScenario11.mat';
-        %         numConditions = 8;
-        %
-        %         etaVec = linspace(0.1,10,numConditions);
-        %         for m=1:numConditions
-        %             nodesPerLayer_cell{end+1}   = [28*28 50 25 10];
-        %             errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
-        %             numSubSteps_cell{end+1}     = 1;
-        %             eta_cell{end+1}             = etaVec(m);
-        %             miniBatchSize_cell{end+1}   = 32;
-        %             numEpochs_cell{end+1}       = 5;
-        %             displayProgress_cell{end+1} = true;
-        %         end
-        %
-        %         initialNeuralNetworkFile = '';  %if non-empty this will ignore nodesPerLayer and initialize neural network based on this file
-        
+
     otherwise
         error('')
 end

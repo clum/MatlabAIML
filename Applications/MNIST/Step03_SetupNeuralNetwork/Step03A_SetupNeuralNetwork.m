@@ -28,32 +28,16 @@ switch scenarioSelection
         seed = 1;
         rng(seed);
         
-        %Initialize weights between random weights/biases uniformly between [-1,1]
-        %Set weights (note the first element of weights is the weights
-        %incoming to layer 2)
-        weights = {};
-        for L=1:length(nodesPerLayer)-1
-            %Randomize between [-1,1]
-            weights{L} = 2*(rand(nodesPerLayer(L+1),nodesPerLayer(L)) - 0.5);
-        end
+        methodID = WeightInitializationMethodID.Uniform;
+        methodParams.LowerBound = -1;
+        methodParams.UpperBound = 1;
+        nn.InitializeWeightsAndBiases(methodID,methodParams);
         
-        for L=2:length(nodesPerLayer)
-            nn.SetWeightsIncomingToLayer(L,weights{L-1});
-        end
+    case {2}
+        %Created by other process, this is a placeholder
+        disp(['scenarioSelection = ',num2str(scenarioSelection),' is setup/created by another process'])
         
-        %Set biases (note the first element of biases is the biases in
-        %layer 2)
-        biases = {};
-        for L=1:length(nodesPerLayer)-1
-            %Randomize between [-1,1]
-            biases{L} = 2*(rand(nodesPerLayer(L+1),1) - 0.5);
-        end
-        
-        for L=2:length(nodesPerLayer)
-            nn.SetBiasesAtLayer(L,biases{L-1});
-        end
-        
-    case 2
+    case 3
         %Glorot initialization
 
         nodesPerLayer = [28*28 50 10];
