@@ -5,6 +5,7 @@
 
 %Version History
 %05/22/23: Created
+%05/25/23: Adding glorot initialization
 
 clear
 clc
@@ -13,7 +14,7 @@ close all
 tic
 
 %% User selections
-%1 = 
+%1 = [784 50 10]
 scenarioSelection = 1;
 
 switch scenarioSelection
@@ -52,6 +53,23 @@ switch scenarioSelection
             nn.SetBiasesAtLayer(L,biases{L-1});
         end
         
+    case 2
+        %Glorot initialization
+
+        nodesPerLayer = [28*28 50 10];
+        nn = NeuralNetwork(nodesPerLayer);
+        nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
+        
+        %Initialize random number generator so weights and biases are
+        %deterministically set
+        seed = 1;
+        rng(seed);
+        
+        %Initialize weights between random weights/biases uniformly between [-1,1]
+        %Set weights (note the first element of weights is the weights
+        %incoming to layer 2)
+        
+
     otherwise
         error('Unsupported scenarioSelection')
 end
