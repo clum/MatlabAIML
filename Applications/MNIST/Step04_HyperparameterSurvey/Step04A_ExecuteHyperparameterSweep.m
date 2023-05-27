@@ -20,7 +20,7 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 2;
+scenarioSelection = 3;
 
 errorFunctionID_cell    = {};
 numSubSteps_cell        = {};
@@ -60,6 +60,23 @@ switch scenarioSelection
             eta_cell{end+1}             = etaVec(m);
             miniBatchSize_cell{end+1}   = 32;
             numEpochs_cell{end+1}       = 5;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 3
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario2.mat'];
+        
+        numConditions = 8;
+        
+        etaVec = linspace(0.005,0.5,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 25;
             displayProgress_cell{end+1} = true;
         end
 

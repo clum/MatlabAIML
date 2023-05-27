@@ -1,6 +1,8 @@
-%Analyze the trained the neural network
+%Analyze the trained neural network
 %
-%Examine saturation at each layer
+%This performs operations such as:
+%   -Examine distribution of weights and biases
+%   -Examine saturation at each layer
 %
 %Christopher Lum
 %lum@uw.edu
@@ -8,6 +10,7 @@
 %Version History
 %05/19/23: Created
 %05/24/23: Refactored workflow
+%05/27/23: Continued working
 
 clear
 clc
@@ -16,27 +19,33 @@ close all
 tic
 
 %% User selections
-trainedNetworkFile = 'TrainedNeuralNetworkScenario1.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
 
-error('START HERE!!!')
 %% Load data
 temp = load(trainedNetworkFile);
-nn                  = temp.nn;
-options             = temp.options;
 
-warning('TEMP: Refactor')
-temp2 = load('NeuralNetworkOnly_ID03.mat')
-nn = temp2.nn;
+nn                          = temp.nn;
+options                     = temp.options;
+trainingDataFile            = temp.trainingDataFile;
+initialNeuralNetworkFile    = temp.initialNeuralNetworkFile;
+E_data                      = temp.E_data;
+norm_gradient_data          = temp.norm_gradient_data;
 
-TrainingSetImages   = temp.TrainingSetImages;
-TrainingSetLabels   = temp.TrainingSetLabels;
-TestSetImages       = temp.TestSetImages;
-TestSetLabels       = temp.TestSetLabels;
+temp2 = load(trainingDataFile);
+U_train     = temp2.U_train;
+D_train     = temp2.D_train;
+U_test      = temp2.U_test;
+D_test      = temp2.D_test;
 
-E_data              = temp.E_data;
-norm_gradient_data  = temp.norm_gradient_data;
+%% Distribution of Weights and Biases
+for k=2:nn.NumLayers
+    
+end
 
-%% Assess accuracy 
+%% Saturation at Each Layer
+%To examine saturation at each layer, we need to forward propagate the
+%layer with some data.
+[ns_test,~] = size(U_test);
 
 %Assess against testing data
 Y_test  = [];
@@ -44,21 +53,11 @@ E_test  = [];
 classifiedCorrectTest   = 0;
 classifiedIncorrectTest = 0;
 y_layer_data = {};
-% for k=1:length(TestSetLabels)
-for k=1:10
+for k=1:ns_test
+    U = U_test(k,:)';
+    D = D_test(k,:)';
 
-    A       = TestSetImages(:,:,k);
-    label   = TestSetLabels(k);
-       
-    %Reshape into an input vector U (stack each column on top of one
-    %another) and convert to double
-    [M,N] = size(A);
-    U = double(reshape(A,M*N,1));
-    
-    %Convert the label to a vector d
-    D = LabelToVector(label);
-    
-    Y = nn.ForwardPropagate(U);    
+    Y = nn.ForwardPropagate(U);
 
     %What are the outputs at each layer
     for m=1:nn.NumLayers
@@ -72,12 +71,15 @@ for k=1:10
     end
     
     E_test(end+1) = NeuralNetwork.Error(Y,D,options.errorFunctionID);
-    Y_test(:,k)  = Y;
-    
+    Y_test(:,k) = Y;
+
     %How did network classify the digit
+    idx = find(D==max(D));
+    label = idx - 1;
+
     idx = find(Y==max(Y));
     labelClassified = idx - 1;
-    
+
     if(labelClassified==label)
         classifiedCorrectTest = classifiedCorrectTest + 1;
     else

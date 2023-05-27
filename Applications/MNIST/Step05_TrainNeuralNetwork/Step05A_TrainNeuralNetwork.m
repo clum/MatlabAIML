@@ -52,6 +52,17 @@ switch scenarioSelection
         options.numEpochs       = 100;
         options.displayProgress = true;
         
+    case 4
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario2.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 0.0757;
+        options.miniBatchSize   = 32;
+        options.numEpochs       = 100;
+        options.displayProgress = true;
+        
     otherwise
         error('')
 end

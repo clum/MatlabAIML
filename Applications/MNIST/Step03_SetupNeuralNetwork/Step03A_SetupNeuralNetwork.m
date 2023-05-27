@@ -6,6 +6,7 @@
 %Version History
 %05/22/23: Created
 %05/25/23: Adding glorot initialization
+%05/27/23: Continued working
 
 clear
 clc
@@ -19,6 +20,7 @@ scenarioSelection = 1;
 
 switch scenarioSelection
     case 1
+        %Uniform [-1,1] initialization
         nodesPerLayer = [28*28 50 10];
         nn = NeuralNetwork(nodesPerLayer);
         nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
@@ -39,7 +41,6 @@ switch scenarioSelection
         
     case 3
         %Glorot initialization
-
         nodesPerLayer = [28*28 50 10];
         nn = NeuralNetwork(nodesPerLayer);
         nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.Sigmoid);
@@ -57,6 +58,11 @@ switch scenarioSelection
     otherwise
         error('Unsupported scenarioSelection')
 end
+
+%% Display the network
+nn
+
+nn.HistogramWeightsAndBiases();
 
 %% Save network
 outputFile = ['NeuralNetworkScenario',num2str(scenarioSelection),'.mat'];
