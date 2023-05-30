@@ -20,6 +20,7 @@ tic
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario2.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario3.mat';
 trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario5.mat';
 
 %% Load data
 disp(['Loading ',trainedNetworkFile])

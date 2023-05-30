@@ -5,6 +5,8 @@
 
 %Version History
 %05/21/23: Created
+%05/28/23: Added scenario = 2;
+%05/29/23: Added scenario = 3;
 
 clear
 clc
@@ -14,7 +16,9 @@ tic
 
 %% User selections
 %1 = 10 outputs, each output is either 0 or 1
-scenarioSelection = 1;
+%2 = 10 outputs, each output is either 0.1 or 0.9
+%3 = 10 outputs, each output is either 0.2 or 0.8
+scenarioSelection = 3;
 
 %% Load data
 cwd = pwd;
@@ -38,13 +42,13 @@ Labels = [TrainingSetLabels;TestSetLabels];
 %Flatten images and labels into matrices
 ns = length(Labels);
 switch scenarioSelection
-    case 1
+    case {1,2,3}
         %784 inputs, 10 outputs
         A = Images(:,:,1);
         [M,N] = size(A);
         nu = M*N;
         no = 10;
-        
+    
     otherwise
         error('Supported scenarioSelection')
 end
@@ -59,7 +63,7 @@ for k=1:ns
     A = Images(:,:,k);
 
     switch scenarioSelection
-        case 1
+        case {1,2,3}
             %Reshape into an input vector U (stack each column on top of one
             %another) and convert to double
             [M,N] = size(A);
@@ -79,6 +83,30 @@ for k=1:ns
             %labels converted to vectors w/ each element is either 0 or 1
             %Convert the label to a vector d
             D = LabelToVector(label);
+            
+        case 2
+            %labels converted to vectors w/ each element is either 0.1 or
+            %0.9
+            %Convert the label to a vector d
+            D = LabelToVector(label);
+            
+            idx0 = find(D==0);
+            idx1 = find(D==1);
+            
+            D(idx0) = 0.1;
+            D(idx1) = 0.9;
+
+        case 3
+            %labels converted to vectors w/ each element is either 0.2 or
+            %0.8
+            %Convert the label to a vector d
+            D = LabelToVector(label);
+            
+            idx0 = find(D==0);
+            idx1 = find(D==1);
+            
+            D(idx0) = 0.2;
+            D(idx1) = 0.8;
     
         otherwise
             error('Supported scenarioSelection')

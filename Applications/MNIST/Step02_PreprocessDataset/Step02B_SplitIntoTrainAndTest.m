@@ -6,6 +6,8 @@
 %Version History
 %04/22/23: Created
 %05/21/23: Modified
+%05/28/23: Updated
+%05/29/23: Updated
 
 clear
 clc
@@ -14,7 +16,7 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 3;
+scenarioSelection = 5;
 
 %% Load and split data
 switch scenarioSelection
@@ -72,6 +74,48 @@ switch scenarioSelection
         
         idxTraining = P(1:1:numTrainingSamples);
         idxTest     = P(idxTraining+1:1:idxTraining+1+numTestSamples-1);
+        
+    case 4
+        %Split using 50,000 for training and 10,000 for test (similar to
+        %http://neuralnetworksanddeeplearning.com/chap1.html)
+        flatDataFile = 'FlatDatasetScenario2.mat';
+        temp = load(flatDataFile);
+        
+        U_data = temp.U_data;
+        D_data = temp.D_data;
+        
+        numTrainingSamples  = 50000;
+        numTestSamples      = 10000;
+        
+        idxTrainingStart    = 1;
+        idxTrainingEnd      = idxTrainingStart + numTrainingSamples - 1;
+        
+        idxTestStart        = idxTrainingEnd + 1;
+        idxTestEnd          = idxTestStart + numTestSamples - 1;
+        
+        idxTraining         = [idxTrainingStart:1:idxTrainingEnd];
+        idxTest             = [idxTestStart:1:idxTestEnd];
+        
+    case 5
+        %Split using 50,000 for training and 10,000 for test (similar to
+        %http://neuralnetworksanddeeplearning.com/chap1.html)
+        flatDataFile = 'FlatDatasetScenario3.mat';
+        temp = load(flatDataFile);
+        
+        U_data = temp.U_data;
+        D_data = temp.D_data;
+        
+        numTrainingSamples  = 50000;
+        numTestSamples      = 10000;
+        
+        idxTrainingStart    = 1;
+        idxTrainingEnd      = idxTrainingStart + numTrainingSamples - 1;
+        
+        idxTestStart        = idxTrainingEnd + 1;
+        idxTestEnd          = idxTestStart + numTestSamples - 1;
+        
+        idxTraining         = [idxTrainingStart:1:idxTrainingEnd];
+        idxTest             = [idxTestStart:1:idxTestEnd];
         
     otherwise
         error('Supported scenarioSelection')
