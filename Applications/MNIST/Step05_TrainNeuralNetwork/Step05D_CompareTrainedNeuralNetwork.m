@@ -25,8 +25,11 @@ tic
 % trainedNetworkFile_A = 'TrainedNeuralNetworkScenario4_OLD.mat';
 % trainedNetworkFile_B = 'TrainedNeuralNetworkScenario4.mat';
 
-trainedNetworkFile_A = 'TrainedNeuralNetworkScenario2.mat';
-trainedNetworkFile_B = 'TrainedNeuralNetworkScenario5.mat';
+% trainedNetworkFile_A = 'TrainedNeuralNetworkScenario2.mat';
+% trainedNetworkFile_B = 'TrainedNeuralNetworkScenario5.mat';
+
+trainedNetworkFile_A = 'TrainedNeuralNetworkScenario4.mat';
+trainedNetworkFile_B = 'TrainedNeuralNetworkScenario7.mat';
 
 %% Load data
 %Set A

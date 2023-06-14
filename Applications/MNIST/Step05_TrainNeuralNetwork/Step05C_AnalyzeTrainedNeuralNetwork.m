@@ -11,6 +11,7 @@
 %05/19/23: Created
 %05/24/23: Refactored workflow
 %05/27/23: Continued working
+%06/13/23: Renamed file and continued working
 
 clear
 clc
@@ -19,7 +20,11 @@ close all
 tic
 
 %% User selections
-trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
+
+displayProgress = true;
+ns_saturation = 10; %number of samples to use in saturation analysis
 
 %% Load data
 temp = load(trainedNetworkFile);
@@ -38,9 +43,7 @@ U_test      = temp2.U_test;
 D_test      = temp2.D_test;
 
 %% Distribution of Weights and Biases
-for k=2:nn.NumLayers
-    
-end
+figh_histW = nn.HistogramWeightsAndBiases();
 
 %% Saturation at Each Layer
 %To examine saturation at each layer, we need to forward propagate the
@@ -53,7 +56,9 @@ E_test  = [];
 classifiedCorrectTest   = 0;
 classifiedIncorrectTest = 0;
 y_layer_data = {};
-for k=1:ns_test
+deltaFraction = 0.05;        %gradularity in displaying progress
+currentFractionThreshold = 1*deltaFraction;
+for k=1:ns_saturation
     U = U_test(k,:)';
     D = D_test(k,:)';
 
@@ -84,6 +89,16 @@ for k=1:ns_test
         classifiedCorrectTest = classifiedCorrectTest + 1;
     else
         classifiedIncorrectTest = classifiedIncorrectTest + 1;
+    end
+    
+    %Display progress
+    if(displayProgress)
+        fractionComplete = k/ns_saturation;
+        
+        if(fractionComplete > currentFractionThreshold)
+            disp([num2str(fractionComplete*100),'% complete'])
+            currentFractionThreshold = currentFractionThreshold + deltaFraction;
+        end
     end
 end
 

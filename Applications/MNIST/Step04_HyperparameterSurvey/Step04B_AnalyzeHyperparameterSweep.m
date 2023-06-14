@@ -16,7 +16,7 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 3;
+scenarioSelection = 5;
 
 %% Load data
 %Find all files associated with this scenarioSelection

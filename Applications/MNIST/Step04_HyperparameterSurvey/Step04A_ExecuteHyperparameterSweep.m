@@ -10,6 +10,7 @@
 %05/09/23: Loading initial condition NN (AKA warm start)
 %05/22/23: Refactored workflow
 %05/24/23: Continued refactor
+%06/11/23: Added scenarioSelection = 4
 
 clear
 clc
@@ -20,7 +21,7 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 3;
+scenarioSelection = 5;
 
 errorFunctionID_cell    = {};
 numSubSteps_cell        = {};
@@ -80,6 +81,40 @@ switch scenarioSelection
             displayProgress_cell{end+1} = true;
         end
 
+    case 4
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
+        
+        numConditions = 8;
+        
+        etaVec = linspace(0.0005,0.04,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 25;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 5
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
+        
+        numConditions = 8;
+        
+        etaVec = linspace(0.0005,0.04,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 25;
+            displayProgress_cell{end+1} = true;
+        end
+        
     otherwise
         error('')
 end

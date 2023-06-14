@@ -10,6 +10,7 @@
 %05/24/23: Refactored architecture
 %05/28/23: Adding scenarioSelection = 5
 %05/29/23: Adding scenarioSelection = 6
+%06/12/23: Adding scenarioSelection = 7
 
 clear
 clc
@@ -18,7 +19,7 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 6;
+scenarioSelection = 8;
 
 switch scenarioSelection
     case 1
@@ -83,6 +84,28 @@ switch scenarioSelection
         options.errorFunctionID = ErrorFunctionID.SquaredError;
         options.numSubSteps     = 1;
         options.eta             = 0.05;
+        options.miniBatchSize   = 32;
+        options.numEpochs       = 100;
+        options.displayProgress = true;
+        
+    case 7
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 0.006;
+        options.miniBatchSize   = 32;
+        options.numEpochs       = 100;
+        options.displayProgress = true;
+        
+    case 8
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 0.01;
         options.miniBatchSize   = 32;
         options.numEpochs       = 100;
         options.displayProgress = true;

@@ -7,6 +7,7 @@
 %05/22/23: Created
 %05/25/23: Adding glorot initialization
 %05/27/23: Continued working
+%06/11/23: Finished scenarioSelection = 3
 
 clear
 clc
@@ -16,7 +17,8 @@ tic
 
 %% User selections
 %1 = [784 50 10]
-scenarioSelection = 1;
+%2 = Created by other process
+scenarioSelection = 3;
 
 switch scenarioSelection
     case 1
@@ -50,9 +52,8 @@ switch scenarioSelection
         seed = 1;
         rng(seed);
         
-        %Initialize weights between random weights/biases uniformly between [-1,1]
-        %Set weights (note the first element of weights is the weights
-        %incoming to layer 2)
+        methodID = WeightInitializationMethodID.Glorot;
+        nn.InitializeWeightsAndBiases(methodID);
         
 
     otherwise
