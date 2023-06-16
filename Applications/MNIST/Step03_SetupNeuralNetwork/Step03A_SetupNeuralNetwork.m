@@ -8,6 +8,7 @@
 %05/25/23: Adding glorot initialization
 %05/27/23: Continued working
 %06/11/23: Finished scenarioSelection = 3
+%06/14/23: Added scenarioSelection = 4
 
 clear
 clc
@@ -16,9 +17,7 @@ close all
 tic
 
 %% User selections
-%1 = [784 50 10]
-%2 = Created by other process
-scenarioSelection = 3;
+scenarioSelection = 4;
 
 switch scenarioSelection
     case 1
@@ -55,6 +54,20 @@ switch scenarioSelection
         methodID = WeightInitializationMethodID.Glorot;
         nn.InitializeWeightsAndBiases(methodID);
         
+    case 4
+        %ReLU with Glorot initialization
+        nodesPerLayer = [28*28 50 10];
+        nn = NeuralNetwork(nodesPerLayer);
+        nn.SetActivationFunctionAtAllLayers(ActivationFunctionID.ReLU);
+        nn.SetActivationFunctionAtLayer(3,ActivationFunctionID.Sigmoid);
+        
+        %Initialize random number generator so weights and biases are
+        %deterministically set
+        seed = 1;
+        rng(seed);
+        
+        methodID = WeightInitializationMethodID.Glorot;
+        nn.InitializeWeightsAndBiases(methodID);
 
     otherwise
         error('Unsupported scenarioSelection')

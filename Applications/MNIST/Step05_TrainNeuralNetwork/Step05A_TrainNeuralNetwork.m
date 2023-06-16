@@ -11,6 +11,7 @@
 %05/28/23: Adding scenarioSelection = 5
 %05/29/23: Adding scenarioSelection = 6
 %06/12/23: Adding scenarioSelection = 7
+%06/14/23: Adding scenarioSelection = 9
 
 clear
 clc
@@ -19,7 +20,7 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 8;
+scenarioSelection = 9;
 
 switch scenarioSelection
     case 1
@@ -101,6 +102,17 @@ switch scenarioSelection
         
     case 8
         trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 0.01;
+        options.miniBatchSize   = 32;
+        options.numEpochs       = 100;
+        options.displayProgress = true;
+        
+    case 9
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario5.mat'];
         initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario3.mat'];
         
         options.errorFunctionID = ErrorFunctionID.SquaredError;

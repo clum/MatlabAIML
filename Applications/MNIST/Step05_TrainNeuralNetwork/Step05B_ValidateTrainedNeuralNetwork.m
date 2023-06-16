@@ -8,6 +8,7 @@
 %04/23/23: Continued working
 %05/06/23: Continued working
 %05/24/23: Refactored workflow
+%06/14/23: Adding scenarios
 
 clear
 clc
@@ -23,7 +24,8 @@ tic
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario5.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario6.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
-trainedNetworkFile = 'TrainedNeuralNetworkScenario8.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario8.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario9.mat';
 
 %% Load data
 disp(['Loading ',trainedNetworkFile])
