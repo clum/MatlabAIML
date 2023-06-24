@@ -6,6 +6,7 @@
 
 %Version History
 %06/17/23: Created
+%06/24/23: Updated
 
 clear
 clc
@@ -15,11 +16,7 @@ tic
 
 %% User selections
 outputFileName = 'YaleFacesData.mat';
-picturesFolder = 'YaleFaces';
-
-%% Load parameters
-temp = load('MNISTInfo.mat');
-MNISTInfo = temp.MNISTInfo;
+picturesFolder = 'YaleFaces\Faces';
 
 %% Parse data
 [pictures] = dir2(picturesFolder,'only_files'); %assume folder only has  pictures, ReadMe.txt is not in this folder
