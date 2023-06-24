@@ -50,22 +50,22 @@ end
 %% Unzip data
 disp('Unzipping data')
 [outputFolderTrainingSetImages,~] = SeperateFileNameAndExtension(fileNameTrainingSetImages);
-if(~exist(fileNameTrainingSetImages))
+if(~exist(outputFolderTrainingSetImages))
     gunzip(fileNameTrainingSetImages,outputFolderTrainingSetImages)
 end
 
 [outputFolderTrainingSetLabels,~] = SeperateFileNameAndExtension(fileNameTrainingSetLabels);
-if(~exist(fileNameTrainingSetImages))
+if(~exist(outputFolderTrainingSetLabels))
     gunzip(fileNameTrainingSetLabels,outputFolderTrainingSetLabels)
 end
 
 [outputFolderTestSetImages,~] = SeperateFileNameAndExtension(fileNameTestSetImages);
-if(~exist(fileNameTrainingSetImages))
+if(~exist(outputFolderTestSetImages))
     gunzip(fileNameTestSetImages,outputFolderTestSetImages)
 end
 
 [outputFolderTestSetLabels,~] = SeperateFileNameAndExtension(fileNameTestSetLabels);
-if(~exist(fileNameTrainingSetImages))
+if(~exist(outputFolderTestSetLabels))
     gunzip(fileNameTestSetLabels,outputFolderTestSetLabels)
 end
 

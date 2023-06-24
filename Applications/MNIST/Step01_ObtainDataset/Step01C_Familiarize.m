@@ -5,10 +5,13 @@
 
 %Version History
 %01/29/23: Created
+%05/21/23: Moved to another folder
 
 clear
 clc
 close all
+
+ChangeWorkingDirectoryToThisLocation();
 
 tic
 
@@ -18,11 +21,6 @@ N       = 6;            %num cols in subplot
 set     = 'testing';    %'training' or 'testing'
 
 %% Load parameters
-cwd = pwd;
-
-step01Directory = [fileparts(cwd),'\Step01_ObtainDataset'];
-cd(step01Directory);
-
 temp = load('MNISTInfo.mat');
 MNISTInfo = temp.MNISTInfo;
 
@@ -31,8 +29,6 @@ TrainingSetImages   = temp2.TrainingSetImages;
 TrainingSetLabels   = temp2.TrainingSetLabels;
 TestSetImages       = temp2.TestSetImages;
 TestSetLabels       = temp2.TestSetLabels;
-
-cd(cwd);
 
 %View image and label
 figure('Name',['set = ',set])
