@@ -18,13 +18,6 @@ scenarioSelection = 1;
 switch scenarioSelection
     case 1
         trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
-        
-%         options.errorFunctionID = ErrorFunctionID.SquaredError;
-%         options.numSubSteps     = 1;
-%         options.eta             = 0.22;
-%         options.miniBatchSize   = 32;
-%         options.numEpochs       = 5;
-%         options.displayProgress = true;
                 
     otherwise
         error('')
@@ -69,6 +62,7 @@ assert(max(abs(xbar-xbar2))==0)
 figure
 aveFaceMatrix = uint8(reshape(xbar,M,N));
 imshow(aveFaceMatrix)
+title('aveFaceMatrix')
 
 %Subtract xbar from each column of X.  This effectively subtacts the
 %average face from each example face.
@@ -76,7 +70,7 @@ Xbar = xbar*ones(1,ns_train);
 B = X - Xbar;
 
 figure
-idx = 50;
+idx = 60;
 
 subplot(1,2,1)
 imshow(uint8(reshape(X(:,idx),M,N)));
@@ -95,33 +89,49 @@ end
 assert(max(max(abs(B-B2)))==0);
 
 %Compute covariance matrix of columns of B
-covB = (1/(M*N))*B'*B;
+covB = (1/(M*N))*(B')*B;
 
 figure;
-plot(covB(:,1))
+covBs = ScaleValues(covB,0,255);
+imshow(uint8(covBs))
+title('covB')
 
 %perform SVD
-[U,S,V] = svd(X,'econ');
+[U,S,V] = svd(B,'econ');
+
+%Plot singular values
+figure
+semilogy(diag(S))
+xlabel('r')
+ylabel('S_r')
+grid on
 
 %% Check results
-u1 = U(:,1);
+figure
+eigenfacesIndices = [1 2 5 50 100 135];
 
+for m=1:length(eigenfacesIndices)
+    k = eigenfacesIndices(m);
+    u_k = U(:,k);
+    u_k_s = ScaleValues(u_k,0,255);
+    u_k_s_matrix = reshape(u_k_s,M,N);
+    subplot(2,3,m)
+    imshow(uint8(u_k_s_matrix))
+    title(['u_{',num2str(eigenfacesIndices(m)),'}']);
+end
 
-%% Save network
-% outputFile = ['TrainedNeuralNetworkScenario',num2str(scenarioSelection),'.mat'];
-% saveVars = {
-%     'nn'
-%     'options'
-%     
-%     'trainingDataFile'
-%     'initialNeuralNetworkFile'
-%     
-%     'E_data'
-%     'norm_gradient_data'
-%     };
-% s = SaveVarsString(outputFile,saveVars);
-% eval(s);
-% disp(['Saved to ',outputFile])
+%% Save data
+outputFile = ['PCAScenario',num2str(scenarioSelection),'.mat'];
+saveVars = {
+    'X'
+    'B'
+    'U'
+    'S'
+    'V'
+    };
+s = SaveVarsString(outputFile,saveVars);
+eval(s);
+disp(['Saved to ',outputFile])
 
 toc
 disp('DONE!')

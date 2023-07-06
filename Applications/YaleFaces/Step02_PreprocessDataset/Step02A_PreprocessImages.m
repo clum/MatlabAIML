@@ -15,7 +15,7 @@ tic
 %% User selections
 %1 = no pre-processing
 %2 = cropped to only include face
-scenarioSelection = 1;
+scenarioSelection = 2;
 
 %% Load data
 cwd = pwd;
@@ -38,8 +38,8 @@ switch scenarioSelection
         facesCropped = faces;
 
     case 2
-        width = 300;
-        height = 200;
+        width = 200;
+        height = 243;
         for k=1:expectedNumSubjects
             switch k
                 case {3}
