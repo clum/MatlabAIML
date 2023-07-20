@@ -5,6 +5,7 @@
 
 %Version History
 %06/18/23: Created
+%07/19/23: Added scenarioSelection = 2
 
 clear
 clc
@@ -13,13 +14,30 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 1;
+scenarioSelection = 2;
 
 %% Load and split data
 switch scenarioSelection
     case 1
         %Use subject 14 and 15 as test
         preprocessedDatasetFile = 'PreprocessedDatasetScenario1.mat';
+        temp = load(preprocessedDatasetFile);
+        
+        facePreprocessed        = temp.facePreprocessed;
+        subjectNumberLabels     = temp.subjectNumberLabels;
+        conditionLabels         = temp.conditionLabels;
+      
+        idx = [1:1:length(subjectNumberLabels)]';
+
+        idx_test = union(...
+            find(subjectNumberLabels==14),...
+            find(subjectNumberLabels==15));
+
+        idx_train = setdiff(idx,idx_test);
+
+    case 2
+        %Use subject 14 and 15 as test
+        preprocessedDatasetFile = 'PreprocessedDatasetScenario2.mat';
         temp = load(preprocessedDatasetFile);
         
         facePreprocessed        = temp.facePreprocessed;

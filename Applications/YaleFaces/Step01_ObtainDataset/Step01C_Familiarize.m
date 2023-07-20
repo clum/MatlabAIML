@@ -5,6 +5,8 @@
 
 %Version History
 %06/01/23: Created
+%07/19/23: Updated how expectedNumSubjects, expectedNumConditions are
+%          calculated
 
 clear
 clc
@@ -14,15 +16,14 @@ ChangeWorkingDirectoryToThisLocation();
 
 tic
 
-%% User selections
-expectedNumSubjects = 15;
-expectedNumConditions = 11;
-
 %% Load parameters
 temp = load('YaleFacesData.mat');
 faces               = temp.faces;
 subjectNumberLabels = temp.subjectNumberLabels;
 conditionLabels     = temp.conditionLabels;
+
+expectedNumSubjects     = length(unique(subjectNumberLabels));
+expectedNumConditions   = length(unique(conditionLabels));
 
 %View image and label
 for k=1:expectedNumSubjects

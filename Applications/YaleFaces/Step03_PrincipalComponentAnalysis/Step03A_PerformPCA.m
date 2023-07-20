@@ -5,6 +5,8 @@
 
 %Version History
 %06/18/23: Created
+%07/07/23: Continued working
+%07/19/23: Worked on another set of data
 
 clear
 clc
@@ -13,12 +15,15 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 1;
+scenarioSelection = 2;
 
 switch scenarioSelection
     case 1
-        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
-                
+        trainingDataFile = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+            
+    case 2
+        trainingDataFile = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario2.mat'];
+        
     otherwise
         error('')
 end
@@ -32,8 +37,8 @@ subjectNumberLabels_train   = temp.subjectNumberLabels_train;
 conditionLabels_train       = temp.conditionLabels_train;
 
 faces_test                  = temp.faces_test;
-subjectNumberLabels_test   = temp.subjectNumberLabels_test;
-conditionLabels_test       = temp.conditionLabels_test;
+subjectNumberLabels_test    = temp.subjectNumberLabels_test;
+conditionLabels_test        = temp.conditionLabels_test;
 
 %% Perform PCA
 disp('Performing PCA')
@@ -65,7 +70,8 @@ imshow(aveFaceMatrix)
 title('aveFaceMatrix')
 
 %Subtract xbar from each column of X.  This effectively subtacts the
-%average face from each example face.
+%average face from each example face.  The purpose of this is to center the
+%data about the origin.
 Xbar = xbar*ones(1,ns_train);
 B = X - Xbar;
 
@@ -74,11 +80,11 @@ idx = 60;
 
 subplot(1,2,1)
 imshow(uint8(reshape(X(:,idx),M,N)));
-title('X')
+title(['X(:,',num2str(idx),')'])
 
 subplot(1,2,2)
 imshow(uint8(reshape(B(:,idx),M,N)));
-title('B')
+title(['B(:,',num2str(idx),')'])
 
 %Check we get the same answer if we methodically subtract off each column
 B2 = zeros(size(X));
@@ -100,8 +106,9 @@ title('covB')
 [U,S,V] = svd(B,'econ');
 
 %Plot singular values
+[R,R] = size(S);
 figure
-semilogy(diag(S))
+semilogy([1:1:R],diag(S))
 xlabel('r')
 ylabel('S_r')
 grid on
@@ -124,6 +131,7 @@ end
 outputFile = ['PCAScenario',num2str(scenarioSelection),'.mat'];
 saveVars = {
     'X'
+    'xbar'
     'B'
     'U'
     'S'
