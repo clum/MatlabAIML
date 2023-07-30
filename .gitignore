@@ -77,3 +77,5 @@ Backup of *.doc*
 /Applications/MNIST/Step01_ObtainDataset/t10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte
 /Applications/MNIST/Step01_ObtainDataset/train-images-idx3-ubyte/train-images-idx3-ubyte
 /Applications/MNIST/Step01_ObtainDataset/train-labels-idx1-ubyte/train-labels-idx1-ubyte
+
+/Applications/YaleFaces/Step01_ObtainDataset/YaleFaces
