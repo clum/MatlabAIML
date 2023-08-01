@@ -12,6 +12,7 @@
 %05/24/23: Continued refactor
 %06/11/23: Added scenarioSelection = 4
 %06/14/23: Added scenarioSelection = 7
+%07/29/23: Changed scenarioSelection = 7 to use a small training set
 
 clear
 clc
@@ -22,7 +23,7 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 7;
+scenarioSelection = 8;
 
 errorFunctionID_cell    = {};
 numSubSteps_cell        = {};
@@ -135,7 +136,7 @@ switch scenarioSelection
         
     case 7
         %Vary eta
-        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
         initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario4.mat'];
         
         numConditions = 8;
@@ -148,6 +149,23 @@ switch scenarioSelection
             eta_cell{end+1}             = etaVec(m);
             miniBatchSize_cell{end+1}   = 32;
             numEpochs_cell{end+1}       = 5;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 8
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario5.mat'];
+        
+        numConditions = 4*4;
+        
+        etaVec = linspace(0.0001,0.01,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 150;
             displayProgress_cell{end+1} = true;
         end
         

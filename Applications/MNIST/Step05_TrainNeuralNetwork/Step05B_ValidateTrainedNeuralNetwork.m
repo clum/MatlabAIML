@@ -9,6 +9,8 @@
 %05/06/23: Continued working
 %05/24/23: Refactored workflow
 %06/14/23: Adding scenarios
+%07/29/23: Adding scenarios
+%07/30/23: Adding gradient plot
 
 clear
 clc
@@ -25,7 +27,9 @@ tic
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario6.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario8.mat';
-trainedNetworkFile = 'TrainedNeuralNetworkScenario9.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario9.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario10.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
 
 %% Load data
 disp(['Loading ',trainedNetworkFile])
@@ -118,20 +122,34 @@ disp(' ')
 
 %Filter E_data to get a better idea of system converged during training
 averageWindow = 20;
-E_data_average = NaN(1,length(E_data));
+E_data_average              = NaN(1,length(E_data));
+norm_gradient_data_average  = NaN(1,length(norm_gradient_data));
 for k=averageWindow:length(E_data)
     idxStart    = k-averageWindow+1;
     idxEnd      = idxStart+averageWindow-1;
-    E_data_average(k) = sum(E_data(idxStart:idxEnd))/averageWindow;
+    E_data_average(k)               = sum(E_data(idxStart:idxEnd))/averageWindow;
+    norm_gradient_data_average(k)   = sum(norm_gradient_data(idxStart:idxEnd))/averageWindow;
 end
 
 figure
+ax = [];
+ax(end+1) = subplot(2,1,1);
 hold on
 plot(E_data,'DisplayName',StringWithUnderscoresForPlot('E_data'))
 plot(E_data_average,'LineWidth',3,'DisplayName',StringWithUnderscoresForPlot('E_data_average'))
 grid on
 title('E (filtered) during training process')
 legend()
+
+ax(end+1) = subplot(2,1,2);
+hold on
+plot(norm_gradient_data,'DisplayName',StringWithUnderscoresForPlot('norm_gradient_data'))
+plot(norm_gradient_data_average,'LineWidth',3,'DisplayName',StringWithUnderscoresForPlot('norm_gradient_data_average'))
+grid on
+title('Norm of gradient (filtered) during training process')
+legend()
+
+linkaxes(ax,'x')
 
 %% Save the NeuralNetwork by itself in a file
 outputFile = 'NeuralNetworkOnly.mat';

@@ -12,6 +12,8 @@
 %05/29/23: Adding scenarioSelection = 6
 %06/12/23: Adding scenarioSelection = 7
 %06/14/23: Adding scenarioSelection = 9
+%07/29/23: Adding scenarioSelection = 10
+%07/31/23: Adding scenarioSelection = 11
 
 clear
 clc
@@ -20,7 +22,7 @@ close all
 tic
 
 %% User selections
-scenarioSelection = 9;
+scenarioSelection = 11;
 
 switch scenarioSelection
     case 1
@@ -120,6 +122,34 @@ switch scenarioSelection
         options.eta             = 0.01;
         options.miniBatchSize   = 32;
         options.numEpochs       = 100;
+        options.displayProgress = true;
+                
+    case 10
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario4.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 1.5000e-04;
+        options.miniBatchSize   = 32;
+%         options.numEpochs       = 25;   %0.3595, 0.2950
+%         options.numEpochs       = 100;   %0.4440, 0.3700
+%         options.numEpochs       = 200;   %0.4775, 0.3800
+        options.numEpochs       = 500;   %0.4990, 0.4250 (4000 sec)
+        options.displayProgress = true;
+        
+    case 11
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario5.mat'];
+        
+        options.errorFunctionID = ErrorFunctionID.SquaredError;
+        options.numSubSteps     = 1;
+        options.eta             = 0.0075;
+        options.miniBatchSize   = 32;
+%         options.numEpochs       = 100;   %0.69, 0.59
+%         options.numEpochs       = 300;   %0.767, 0.68 (2300 sec)
+        options.numEpochs       = 600;   % 0.7885, 0.685 (5211 sec)
+        
         options.displayProgress = true;
         
     otherwise

@@ -6,6 +6,8 @@
 %Version History
 %05/08/23: Created based on previous version
 %05/24/23: Refactored workflow
+%07/30/23: Accounted for situation where there are multiple scenarios with
+%          same accuracy
 
 clear
 clc
@@ -16,7 +18,9 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 7;
+% scenarioSelection = 6;
+% scenarioSelection = 7;
+scenarioSelection = 8;
 
 %% Load data
 %Find all files associated with this scenarioSelection
@@ -161,6 +165,11 @@ end
 
 conditionBestTrain = find(accuracyTrain_data==max(accuracyTrain_data));
 conditionBestTest = find(accuracyTest_data==max(accuracyTest_data));
+
+%Account for situation where there may be multiple scenarios with the best
+%accuracy
+conditionBestTrain = conditionBestTrain(1);
+conditionBestTest = conditionBestTest(1);
 
 bestAccuracyTrain = accuracyTrain_data(conditionBestTrain);
 bestAccuracyTest  = accuracyTest_data(conditionBestTest);
