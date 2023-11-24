@@ -20,7 +20,14 @@ tic
 %% User selections
 % scenarioSelection = 6;
 % scenarioSelection = 7;
-scenarioSelection = 8;
+% scenarioSelection = 8;
+% scenarioSelection = 9;
+% scenarioSelection = 10;
+% scenarioSelection = 11;
+% scenarioSelection = 12;
+% scenarioSelection = 13;
+% scenarioSelection = 14;
+scenarioSelection = 15;
 
 %% Load data
 %Find all files associated with this scenarioSelection

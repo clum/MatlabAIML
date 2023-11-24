@@ -24,7 +24,9 @@ tic
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario10.mat';
-trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario12.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario13.mat';
 
 displayProgress = true;
 ns_saturation = 10; %number of samples to use in saturation analysis

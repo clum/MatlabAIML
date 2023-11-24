@@ -29,7 +29,14 @@ tic
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario8.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario9.mat';
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario10.mat';
-trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario12.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario13.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario14.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario15.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario16.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario17.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario18.mat';
 
 %% Load data
 disp(['Loading ',trainedNetworkFile])
