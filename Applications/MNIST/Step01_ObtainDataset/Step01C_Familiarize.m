@@ -6,6 +6,7 @@
 %Version History
 %01/29/23: Created
 %05/21/23: Moved to another folder
+%11/24/23: Updated
 
 clear
 clc
@@ -16,11 +17,11 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-M       = 6;            %num rows in subplot
-N       = 6;            %num cols in subplot
-set     = 'testing';    %'training' or 'testing'
+M       = 3;            %num rows in subplot
+N       = 3;            %num cols in subplot
+set     = 'training';    %'training' or 'testing'
 
-%% Load parameters
+%% Load data
 temp = load('MNISTInfo.mat');
 MNISTInfo = temp.MNISTInfo;
 
@@ -30,6 +31,7 @@ TrainingSetLabels   = temp2.TrainingSetLabels;
 TestSetImages       = temp2.TestSetImages;
 TestSetLabels       = temp2.TestSetLabels;
 
+%% Visualize some random samples
 %View image and label
 figure('Name',['set = ',set])
 k = 1;
@@ -70,6 +72,22 @@ for m=1:M
         
         k = k + 1;
     end
+end
+
+%% Visualize ambiguous examples
+indices = [
+    57487;
+    35645;
+    38231
+    ];
+
+figure
+for k=1:length(indices)
+    idx = indices(k);
+    label = TrainingSetLabels(idx);
+    subplot(1,length(indices),k)
+    imshow(TrainingSetImages(:,:,idx))
+    title(['idx ',num2str(idx),',  Label ' ,num2str(label)])        
 end
 
 toc
