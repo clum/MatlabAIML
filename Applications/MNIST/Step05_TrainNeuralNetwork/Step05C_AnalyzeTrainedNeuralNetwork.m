@@ -12,6 +12,7 @@
 %05/24/23: Refactored workflow
 %05/27/23: Continued working
 %06/13/23: Renamed file and continued working
+%07/30/23: Updated to figure title
 
 clear
 clc
@@ -21,7 +22,11 @@ tic
 
 %% User selections
 % trainedNetworkFile = 'TrainedNeuralNetworkScenario4.mat';
-trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario7.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario10.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario11.mat';
+% trainedNetworkFile = 'TrainedNeuralNetworkScenario12.mat';
+trainedNetworkFile = 'TrainedNeuralNetworkScenario13.mat';
 
 displayProgress = true;
 ns_saturation = 10; %number of samples to use in saturation analysis
@@ -103,11 +108,15 @@ for k=1:ns_saturation
 end
 
 %% Visualize results
-%Histogram of layer outputs to understand saturation
+%Histogram of layer outputs
 figure
 numBins = 20;
 for m=1:nn.NumLayers
     subplot(nn.NumLayers,1,m)
+    if(m==1)
+        title('Histogram of Layer Outputs')
+    end
+    
     hist(y_layer_data{m},numBins)
     ylabel(['Layer ',num2str(m)'])
 end

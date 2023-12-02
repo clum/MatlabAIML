@@ -30,7 +30,7 @@ disp(['Now reading from ',fileName])
 
 try
     permission = 'r';
-    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian format
+    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian' format
     fileID = fopen(fileName,permission,machinefmt);
     
     magicNumber = fread(fileID,1,'int32');
@@ -79,7 +79,7 @@ disp(['Now reading from ',fileName])
 
 try
     permission = 'r';
-    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian format
+    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian' format
     fileID = fopen(fileName,permission,machinefmt);
     
     magicNumber = fread(fileID,1,'int32');
@@ -111,7 +111,7 @@ disp(['Now reading from ',fileName])
 
 try
     permission = 'r';
-    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian format
+    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian' format
     fileID = fopen(fileName,permission,machinefmt);
     
     magicNumber = fread(fileID,1,'int32');
@@ -160,7 +160,7 @@ disp(['Now reading from ',fileName])
 
 try
     permission = 'r';
-    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian format
+    machinefmt = 'b';   %pursuant to MNIST documentation, data is stored in 'Big-endian' format
     fileID = fopen(fileName,permission,machinefmt);
     
     magicNumber = fread(fileID,1,'int32');

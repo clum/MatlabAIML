@@ -12,6 +12,11 @@
 %05/24/23: Continued refactor
 %06/11/23: Added scenarioSelection = 4
 %06/14/23: Added scenarioSelection = 7
+%07/29/23: Changed scenarioSelection = 7 to use a small training set
+%07/31/23: Added scenarioSelection = 9
+%08/02/23: Added scenarioSelection = 10
+%08/04/23: Added scenarioSelection = 11
+%08/05/23: Added scenarioSelection = 12
 
 clear
 clc
@@ -22,7 +27,7 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
-scenarioSelection = 7;
+scenarioSelection = 15;
 
 errorFunctionID_cell    = {};
 numSubSteps_cell        = {};
@@ -135,7 +140,7 @@ switch scenarioSelection
         
     case 7
         %Vary eta
-        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
         initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario4.mat'];
         
         numConditions = 8;
@@ -151,6 +156,147 @@ switch scenarioSelection
             displayProgress_cell{end+1} = true;
         end
         
+    case 8
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario3.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario5.mat'];
+        
+        numConditions = 4*4;
+        
+        etaVec = linspace(0.0001,0.01,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 150;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 9
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario4.mat'];
+        
+        numConditions = 8;
+        
+        etaVec = linspace(0.00001,0.0005,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 50;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 10
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario6.mat'];
+        
+        numConditions = 4*4;
+        
+        etaVec = linspace(0.0005,0.05,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 50;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 11
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario1.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario7.mat'];
+        
+        numConditions = 2*4;
+        
+        etaVec = linspace(0.0005,0.005,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 25;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 12
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario4.mat'];
+        
+        numConditions = 2*4;
+        
+        etaVec = linspace(0.00001,0.0005,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 10;
+            displayProgress_cell{end+1} = true;
+        end
+        
+    case 13
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario9.mat'];
+        
+        numConditions = 2*4;
+        
+%         etaVec = linspace(0.0001,0.005,numConditions);  %0.8772, 0.8651
+        etaVec = linspace(0.001,0.05,numConditions);  %0.8672,0.8662
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 10;
+            displayProgress_cell{end+1} = true;
+        end        
+        
+    case 14
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario10.mat'];
+        
+        numConditions = 2*4;
+        
+%         etaVec = linspace(0.001,0.05,numConditions);
+        etaVec = linspace(0.0003,0.02,numConditions);
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+            numEpochs_cell{end+1}       = 10;
+            displayProgress_cell{end+1} = true;
+        end        
+        
+    case 15
+        %Vary eta
+        trainingDataFile            = [ReturnPathStringNLevelsUp(1),'\Step02_PreprocessDataset\TrainingAndTestDataScenario4.mat'];
+        initialNeuralNetworkFile    = [ReturnPathStringNLevelsUp(1),'\Step03_SetupNeuralNetwork\NeuralNetworkScenario10.mat'];
+        
+        numConditions = 2*4;
+        
+%         etaVec = linspace(0.0001,0.005,numConditions);      %0.8841, 0.8761 (best eta = 0.0015)
+        etaVec = linspace(0.001,0.05,numConditions);      % 0.9058, 0.9047 (best eta = 0.0290)
+
+        for m=1:numConditions
+            errorFunctionID_cell{end+1} = ErrorFunctionID.SquaredError;
+            numSubSteps_cell{end+1}     = 1;
+            eta_cell{end+1}             = etaVec(m);
+            miniBatchSize_cell{end+1}   = 32;
+%             numEpochs_cell{end+1}       = 50;
+            numEpochs_cell{end+1}       = 25;
+            displayProgress_cell{end+1} = true;
+        end        
+                
     otherwise
         error('')
 end
