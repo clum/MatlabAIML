@@ -1,16 +1,13 @@
-%Familiarize with the simplefit_dataset.
+%Familiarize with various data sets for shallow neural networks.
 %
-%More information about this dataset can be obtained by entering
-%
-%   help simpleseries_dataset
-%
-%in the command window
+%See https://www.mathworks.com/help/deeplearning/gs/fit-data-with-a-neural-network.html
 %
 %Christopher Lum
 %lum@uw.edu
 
 %Version History
 %11/25/23: Created
+%12/01/23: Continued working.  Added bodyfat dataset
 
 clear
 clc
@@ -21,32 +18,50 @@ ChangeWorkingDirectoryToThisLocation();
 tic
 
 %% User selections
+% dataset = 'simpleseries';
+dataset = 'bodyfat';
 
 %% Load data
-temp = load('simpleseries_dataset.mat');
+temp = load([dataset,'_dataset.mat']);
 
-simpleseriesInputs      = temp.simpleseriesInputs;
-simpleseriesTargets     = temp.simpleseriesTargets;
+eval(['inputs = temp.',dataset,'Inputs;'])
+eval(['targets = temp.',dataset,'Targets;'])
+
+%% Analyze dataset
+switch dataset
+    case 'simpleseries'
+        u = cell2mat(inputs);
+        d = cell2mat(targets);
+        
+    case 'bodyfat'
+        u = inputs;
+        d = targets;
+        
+    otherwise
+        error('Unsupported dataset')
+end
+
+[dimensionInputs,numExamples] = size(u);
+[dimensionTargets,numExamples2] = size(d);
+
+assert(numExamples==numExamples2)
+
+disp(['dimensionInputs  = ',num2str(dimensionInputs)])
+disp(['dimensionTargets = ',num2str(dimensionTargets)])
+disp(['numExamples      = ',num2str(numExamples)])
 
 %% Visualize the dataset
-u = cell2mat(simpleseriesInputs);
-d = cell2mat(simpleseriesTargets);
-
-plot(u,d,'rx')
-xlabel('u')
-ylabel('d')
-grid on
-
-%% Train a network
-[X,T] = simpleseries_dataset;
-net = narxnet(1:2,1:2,10);
-
-%prepare time series data for network simulation or training
-[Xs,Xi,Ai,Ts] = preparets(net,X,{},T);
-net = train(net,Xs,Ts,Xi,Ai);
-view(net)
-Y = net(Xs,Xi,Ai)
-plotresponse(Ts,Y)
+if(dimensionTargets==1)
+    figure
+    P = ceil(sqrt(dimensionInputs));
+    for k=1:dimensionInputs
+        subplot(P,P,k)
+        plot(u(k,:),d,'rx')
+        xlabel(['u_{',num2str(k),'}'])
+        ylabel('d')
+        grid on
+    end
+end
 
 toc
 disp('DONE!')
